@@ -10,7 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { createIssueSchema } from '@/app/validationSchemas';
-import ErrorMessage from '@/app/components/ErrorMEssage';
+import ErrorMessage from '@/app/components/ErrorMessage';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
