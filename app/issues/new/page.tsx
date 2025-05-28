@@ -1,9 +1,11 @@
 'use client';
-import { Button, TextField } from '@radix-ui/themes';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { Button, Callout, TextField } from '@radix-ui/themes';
+import { Controller, useForm } from 'react-hook-form';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
-import { Controller, useForm } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
 
 interface IssueForm {
   title: string;
@@ -13,33 +15,47 @@ interface IssueForm {
 function NewPage() {
   const router = useRouter();
   const { register, control, handleSubmit } = useForm<IssueForm>();
+  const [error, setError] = useState('');
+
+  async function onSubmit(data: IssueForm) {
+    const response = await fetch('/api/issues', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      setError('An unexpected error occurred.');
+      return;
+    }
+
+    router.push('/issues');
+  }
 
   return (
-    <form
-      className="max-w-xl space-y-3"
-      onSubmit={handleSubmit(async (data) => {
-        await fetch('/api/issues', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        router.push('/issues');
-      })}
-    >
-      <TextField.Root>
-        <TextField.Input placeholder="Title" {...register('title')} />
-      </TextField.Root>
+    <div className="max-w-xl">
+      {error && (
+        <Callout.Root color="red" className="mb-5">
+          <Callout.Text>{error}</Callout.Text>
+        </Callout.Root>
+      )}
 
-      <Controller
-        name="description"
-        control={control}
-        render={({ field }) => (
-          <SimpleMDE placeholder="Description" {...field} />
-        )}
-      />
+      <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
+        <TextField.Root>
+          <TextField.Input placeholder="Title" {...register('title')} />
+        </TextField.Root>
 
-      <Button>Submit New Issue</Button>
-    </form>
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <SimpleMDE placeholder="Description" {...field} />
+          )}
+        />
+
+        <Button>Submit New Issue</Button>
+      </form>
+    </div>
   );
 }
 
