@@ -11,6 +11,7 @@ import { z } from 'zod';
 
 import { createIssueSchema } from '@/app/validationSchemas';
 import ErrorMessage from '@/app/components/ErrorMessage';
+import Spinner from '@/app/components/Spinner';
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -25,8 +26,11 @@ function NewPage() {
     resolver: zodResolver(createIssueSchema),
   });
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function onSubmit(data: IssueForm) {
+    setIsSubmitting(true);
+
     const response = await fetch('/api/issues', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -34,6 +38,7 @@ function NewPage() {
     });
 
     if (!response.ok) {
+      setIsSubmitting(false);
       setError('An unexpected error occurred.');
       return;
     }
@@ -63,7 +68,9 @@ function NewPage() {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-        <Button>Submit New Issue</Button>
+        <Button disabled={isSubmitting}>
+          Submit New Issue {isSubmitting && <Spinner />}
+        </Button>
       </form>
     </div>
   );
