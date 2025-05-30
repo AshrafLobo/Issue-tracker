@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import { Text } from '@radix-ui/themes';
 
 function ErrorMessage({ children }: PropsWithChildren) {
