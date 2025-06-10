@@ -30,32 +30,36 @@ function IssueForm({ issue }: { issue?: Issue }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function onSubmit(data: IssueFormData) {
-    setIsSubmitting(true);
-    let response: Response;
+    try {
+      setIsSubmitting(true);
+      let response: Response;
 
-    if (issue) {
-      response = await fetch(`/api/issues/${issue.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-    } else {
-      response = await fetch('/api/issues', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-    }
+      if (issue) {
+        response = await fetch(`/api/issues/${issue.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+      } else {
+        response = await fetch('/api/issues', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+      }
 
-    setIsSubmitting(false);
+      setIsSubmitting(false);
 
-    if (!response.ok) {
+      if (!response.ok) {
+        setError('An unexpected error occurred.');
+        return;
+      }
+
+      router.push('/issues');
+      router.refresh();
+    } catch {
       setError('An unexpected error occurred.');
-      return;
     }
-
-    router.push('/issues');
-    router.refresh();
   }
 
   return (
