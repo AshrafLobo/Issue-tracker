@@ -1,7 +1,7 @@
-import prisma from '@/prisma/client';
 import { notFound } from 'next/navigation';
 
-import IssueForm from '../../_components/IssueForm';
+import prisma from '@/prisma/client';
+import IssueForm from '../../_components/IssueFormWrapper';
 
 async function EditIssuePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
