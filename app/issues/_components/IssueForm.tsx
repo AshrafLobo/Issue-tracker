@@ -34,12 +34,21 @@ function IssueForm({ issue }: { issue?: Issue }) {
 
   async function onSubmit(data: IssueFormData) {
     setIsSubmitting(true);
+    let response: Response;
 
-    const response = await fetch('/api/issues', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    if (issue) {
+      response = await fetch(`/api/issues/${issue.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+    } else {
+      response = await fetch('/api/issues', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+    }
 
     if (!response.ok) {
       setIsSubmitting(false);
@@ -78,7 +87,8 @@ function IssueForm({ issue }: { issue?: Issue }) {
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
         <Button disabled={isSubmitting}>
-          Submit New Issue {isSubmitting && <Spinner />}
+          {issue ? 'Update issue' : 'Submit New Issue'}{' '}
+          {isSubmitting && <Spinner />}
         </Button>
       </form>
     </div>
