@@ -50,13 +50,15 @@ function IssueForm({ issue }: { issue?: Issue }) {
       });
     }
 
+    setIsSubmitting(false);
+
     if (!response.ok) {
-      setIsSubmitting(false);
       setError('An unexpected error occurred.');
       return;
     }
 
     router.push('/issues');
+    router.refresh();
   }
 
   return (
