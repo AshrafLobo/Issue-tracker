@@ -55,7 +55,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
         return;
       }
 
-      router.push('/issues');
+      router.push('/issues/list');
       router.refresh();
     } catch {
       setError('An unexpected error occurred.');

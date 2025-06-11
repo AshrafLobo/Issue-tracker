@@ -25,7 +25,7 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
         return;
       }
 
-      router.push('/issues');
+      router.push('/issues/list');
       router.refresh();
     } catch {
       setError(true);

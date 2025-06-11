@@ -7,7 +7,7 @@ function EditIssueButton({ issueId }: { issueId: number }) {
     <Button>
       <Pencil2Icon />
       <Link
-        href={`/issues/${issueId}/edit`}
+        href={`/issues/edit/${issueId}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
         Edit Issue
