@@ -3,15 +3,22 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { AlertDialog, Button, Flex } from '@radix-ui/themes';
 
+import { Spinner } from '@/app/components';
+
 function DeleteIssueButton({ issueId }: { issueId: number }) {
-  const [error, setError] = useState(false);
   const router = useRouter();
+  const [error, setError] = useState(false);
+  const [isDeleting, setDeleting] = useState(false);
 
   async function handleClick() {
     try {
+      setDeleting(true);
+
       const response = await fetch(`/api/issues/${issueId}`, {
         method: 'DELETE',
       });
+
+      setDeleting(false);
 
       if (!response.ok) {
         setError(true);
@@ -22,6 +29,7 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
       router.refresh();
     } catch {
       setError(true);
+      setDeleting(false);
     }
   }
 
@@ -29,7 +37,10 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button color="red">Delete Issue</Button>
+          <Button color="red" disabled={isDeleting}>
+            Delete Issue
+            {isDeleting && <Spinner />}
+          </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
           <AlertDialog.Title>Confirm Deletion</AlertDialog.Title>
@@ -50,6 +61,7 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
           </Flex>
         </AlertDialog.Content>
       </AlertDialog.Root>
+
       <AlertDialog.Root open={error}>
         <AlertDialog.Content>
           <AlertDialog.Title>Error</AlertDialog.Title>
