@@ -18,3 +18,9 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
+
+@layer utilities {
+  .nav-link {
+    @apply text-zinc-500 transition-colors hover:text-zinc-800;
+  }
+}
