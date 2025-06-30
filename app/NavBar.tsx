@@ -15,6 +15,8 @@ import {
 } from '@radix-ui/themes';
 import { AiFillBug } from 'react-icons/ai';
 
+import Skeleton from '@/app/components/Skeleton';
+
 function NavBar() {
   return (
     <nav className="mb-5 border-b px-5 py-3" role="navigation">
@@ -62,7 +64,7 @@ function NavLinks() {
 function AuthStatus() {
   const { status, data: session } = useSession();
 
-  if (status === 'loading') return null;
+  if (status === 'loading') return <Skeleton width="3rem" />;
 
   if (status === 'unauthenticated')
     return (
