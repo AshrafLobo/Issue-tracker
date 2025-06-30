@@ -1,12 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import { NextAuthRequest } from 'next-auth';
 
 import { issueSchema } from '@/app/validationSchemas';
 import prisma from '@/prisma/client';
+import { auth } from '@/auth';
 
-export async function PATCH(
-  request: NextRequest,
+export const PATCH = auth(async function PATCH(
+  request: NextAuthRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!request.auth)
+    return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
+
   const { id } = await params;
   const issueId = parseInt(id);
   const body = await request.json();
@@ -28,12 +33,15 @@ export async function PATCH(
   });
 
   return NextResponse.json(updatedIssue);
-}
+});
 
-export async function DELETE(
-  _request: NextRequest,
+export const DELETE = auth(async function DELETE(
+  request: NextAuthRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!request.auth)
+    return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
+
   const { id } = await params;
   const issueId = parseInt(id);
 
@@ -44,4 +52,4 @@ export async function DELETE(
   await prisma.issue.delete({ where: { id: issueId } });
 
   return NextResponse.json({});
-}
+});

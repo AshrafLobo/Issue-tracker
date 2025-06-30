@@ -5,12 +5,14 @@ import { notFound } from 'next/navigation';
 import EditIssueButton from './EditIssueButton';
 import DeleteIssueButton from './DeleteIssueButton';
 import IssueDetails from './IssueDetails';
+import { auth } from '@/auth';
 
 async function IssueDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const session = await auth();
   const { id } = await params;
   if (!/^\d+$/.test(id)) notFound();
 
@@ -23,12 +25,14 @@ async function IssueDetailPage({
       <Box className="md:col-span-4">
         <IssueDetails issue={issue} />
       </Box>
-      <Box className="md:col-span-1">
-        <Flex direction="column" gap="4">
-          <EditIssueButton issueId={issue.id} />
-          <DeleteIssueButton issueId={issue.id} />
-        </Flex>
-      </Box>
+      {session && (
+        <Box className="md:col-span-1">
+          <Flex direction="column" gap="4">
+            <EditIssueButton issueId={issue.id} />
+            <DeleteIssueButton issueId={issue.id} />
+          </Flex>
+        </Box>
+      )}
     </Grid>
   );
 }
