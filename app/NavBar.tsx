@@ -15,7 +15,7 @@ import {
 } from '@radix-ui/themes';
 import { AiFillBug } from 'react-icons/ai';
 
-import Skeleton from '@/app/components/Skeleton';
+import { Skeleton } from '@/app/components';
 
 function NavBar() {
   return (
