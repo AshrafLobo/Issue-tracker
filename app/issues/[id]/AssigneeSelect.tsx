@@ -3,9 +3,9 @@ import { Select } from '@radix-ui/themes';
 import { useQuery } from '@tanstack/react-query';
 
 import { Skeleton } from '@/app/components';
-import { User } from '@prisma/client';
+import { Issue, User } from '@prisma/client';
 
-function AssigneeSelect() {
+function AssigneeSelect({ issue }: { issue: Issue }) {
   const {
     data: users,
     error,
@@ -21,12 +21,25 @@ function AssigneeSelect() {
 
   if (error) return null;
 
+  const handleAssigneeChange = async (userId: string) => {
+    const assignedToUserId = userId === 'unassigned' ? null : userId;
+
+    await fetch(`/api/issues/${issue.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ assignedToUserId: assignedToUserId }),
+    });
+  };
+
   return (
-    <Select.Root>
+    <Select.Root
+      defaultValue={issue.assignedToUserId || 'unassigned'}
+      onValueChange={handleAssigneeChange}
+    >
       <Select.Trigger placeholder="Asign..." />
       <Select.Content>
         <Select.Group>
           <Select.Label>Suggestions</Select.Label>
+          <Select.Item value="unassigned">Unassigned</Select.Item>
           {users?.map((user) => (
             <Select.Item key={user.id} value={user.id}>
               {user.name}
