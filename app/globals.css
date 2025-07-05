@@ -23,4 +23,8 @@ body {
   .nav-link {
     @apply text-zinc-500 transition-colors hover:text-zinc-800;
   }
+
+  .hideTableOnMd {
+    @apply hidden md:table-cell;
+  }
 }
