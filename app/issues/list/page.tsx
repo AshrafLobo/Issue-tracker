@@ -23,13 +23,17 @@ async function IssuesPage({
   const statuses = Object.values(Status);
   const validStatus = statuses.includes(status) ? status : undefined;
 
+  const orderBy = columns
+    .map((column) => column.value)
+    .includes(searchParamsObject.orderBy)
+    ? { [searchParamsObject.orderBy]: 'asc' }
+    : undefined;
+
   const issues = await prisma.issue.findMany({
     where: {
       status: validStatus,
     },
-    orderBy: {
-      [searchParamsObject.orderBy || 'createdAt']: 'desc',
-    },
+    orderBy,
   });
 
   return (
