@@ -24,7 +24,7 @@ body {
     @apply text-zinc-500 transition-colors hover:text-zinc-800;
   }
 
-  .hideTableOnMd {
+  .hideColumnOnMd {
     @apply hidden md:table-cell;
   }
 }

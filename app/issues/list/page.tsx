@@ -18,8 +18,8 @@ async function IssuesPage({
 }) {
   const columns: { label: string; value: keyof Issue; className?: string }[] = [
     { label: 'Issue', value: 'title' },
-    { label: 'Status', value: 'status', className: 'hideTableOnMd' },
-    { label: 'Created', value: 'createdAt', className: 'hideTableOnMd' },
+    { label: 'Status', value: 'status', className: 'hideColumnOnMd' },
+    { label: 'Created', value: 'createdAt', className: 'hideColumnOnMd' },
   ];
 
   const searchParamsObject = await searchParams;
@@ -81,10 +81,10 @@ async function IssuesPage({
                   <IssueStatusBadge status={issue.status} />
                 </div>
               </Table.Cell>
-              <Table.Cell className="hidden md:table-cell">
+              <Table.Cell className="hideColumnOnMd">
                 <IssueStatusBadge status={issue.status} />
               </Table.Cell>
-              <Table.Cell className="hidden md:table-cell">
+              <Table.Cell className="hideColumnOnMd">
                 {issue.createdAt.toDateString()}
               </Table.Cell>
             </Table.Row>
