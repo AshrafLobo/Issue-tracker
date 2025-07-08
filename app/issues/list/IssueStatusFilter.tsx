@@ -29,7 +29,7 @@ function IssueStatusFilter() {
 
   return (
     <Select.Root
-      defaultValue={searchParams.get('status')! || ''}
+      defaultValue={searchParams.get('status')! || 'ALL'}
       onValueChange={handleStatusChange}
     >
       <Select.Trigger placeholder="Filter by status..." />
